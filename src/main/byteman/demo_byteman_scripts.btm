@@ -1,0 +1,61 @@
+############
+# Tx related
+############
+
+# Creates a CountDown for the times joinTransaction is invoked, starting at 5
+RULE create counter for EntityManager#joinTransaction()
+INTERFACE javax.persistence.EntityManager
+METHOD joinTransaction()
+IF !getCountDown("joinTransaction")
+    DO createCountDown("joinTransaction", 5)
+ENDRULE
+
+# Throw the TransactionRequiredException if we have reached our countDown
+RULE throw TransactionRequiredException on joinTransaction
+INTERFACE javax.persistence.EntityManager
+METHOD joinTransaction()
+IF countDown("joinTransaction")
+    DO throw javax.persistence.TransactionRequiredException("TRE Thrown by Byteman!")
+ENDRULE
+
+########
+# Render related
+########
+
+RULE create counter for renders
+CLASS com.sun.faces.lifecycle.LifecycleImpl
+METHOD execute
+AT ENTRY
+IF createCounter("renderCounter")
+DO
+    incrementCounter("renderCounter")
+ENDRULE
+
+RULE increment render counter
+CLASS com.sun.faces.lifecycle.LifecycleImpl
+METHOD execute
+AT EXIT
+IF readCounter("renderCounter") > 0
+    DO incrementCounter("renderCounter")
+ENDRULE
+
+RULE throw javax.faces.application.ViewExpiredException on every 7th render
+CLASS com.sun.faces.lifecycle.LifecycleImpl
+METHOD render
+AT ENTRY
+BIND viewId:String = $1.getViewRoot().getViewId()
+IF readCounter("renderCounter") > 0 && readCounter("renderCounter") == 14
+    DO throw javax.faces.application.ViewExpiredException("Byteman said to throw VEE", viewId)
+ENDRULE
+
+###############
+# JPA commit related
+###############
+
+RULE throw IllegalArgumentException if Porter is used
+CLASS org.jboss.seamcatch.judcon.demo.view.AuthorBean
+METHOD create()
+BIND author:org.jboss.seamcatch.judcon.demo.domain.Author = $this.author
+IF author.getLastName().equals("Porter")
+    DO throw java.lang.IllegalArgumentException("Not an author (Byteman said he wasn't)")
+ENDRULE

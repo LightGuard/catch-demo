@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.2.1 http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.2.1.xsd">
+  <url-mapping id="book-view">
+    <pattern value="/book/view"/>
+    <view-id value="/scaffold/book/view.jsf"/>
+  </url-mapping>
+  <url-mapping id="book-create">
+    <pattern value="/book/create"/>
+    <view-id value="/scaffold/book/create.jsf"/>
+  </url-mapping>
+  <url-mapping id="book-list">
+    <pattern value="/book/list"/>
+    <view-id value="/scaffold/book/list.jsf"/>
+  </url-mapping>
+  <url-mapping id="author-list">
+    <pattern value="/author/list"/>
+    <view-id value="/scaffold/author/list.jsf"/>
+  </url-mapping>
+  <url-mapping id="author-create">
+    <pattern value="/author/create"/>
+    <view-id value="/scaffold/author/create.jsf"/>
+  </url-mapping>
+  <url-mapping id="author-view">
+    <pattern value="/author/view"/>
+    <view-id value="/scaffold/author/view.jsf"/>
+  </url-mapping>
+  <url-mapping id="index">
+    <pattern value="/index"/>
+    <view-id value="/index.jsf"/>
+  </url-mapping>
+</pretty-config>
